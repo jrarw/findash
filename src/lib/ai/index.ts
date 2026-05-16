@@ -1,0 +1,8 @@
+export { detectIntent, SUGESTOES_INICIAIS } from './smart/intent-engine'
+export type { FinSmartIntent, IntentResult } from './smart/intent-engine'
+export { analisarQuery } from './smart/analisador-smart'
+export type { FinSmartResposta } from './smart/analisador-smart'
+export { calcularFinHealth } from './health/calculador'
+export type { FinHealthResult } from './health/calculador'
+export { detectarAnomalias } from './anomaly/detector'
+export { priorizarInsights } from './priority/engine'
