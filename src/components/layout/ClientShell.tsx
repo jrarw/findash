@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useLayoutEffect } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -106,6 +106,7 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const mainRef = useRef<HTMLElement | null>(null)
   const { data: usuario } = useUsuario()
   const supabase = createClient()
 
@@ -117,7 +118,9 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
       window.scrollTo(0, 0)
       document.documentElement.scrollTop = 0
       document.body.scrollTop = 0
+      mainRef.current?.scrollTo(0, 0)
     })
+    mainRef.current?.scrollTo(0, 0)
   }, [pathname])
 
   useEffect(() => {
@@ -270,7 +273,7 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
             <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center">
               <span className="text-white font-bold text-xs">F</span>
             </div>
-            <span className="font-bold text-[var(--text-primary)] text-base">FinDash</span>
+            <span className="font-bold text-[var(--text-primary)] text-base">Fin</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -284,6 +287,7 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
 
         {/* Page content */}
         <main
+          ref={mainRef}
           className="min-w-0 flex-1 overflow-y-auto overscroll-contain pb-[calc(80px+var(--sab))] [-webkit-overflow-scrolling:touch] lg:pb-6"
         >
           {children}

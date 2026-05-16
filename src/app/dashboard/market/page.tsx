@@ -471,7 +471,7 @@ function CompareTab() {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Buscar por item, marca, categoria ou mercado..."
-              className="h-12 w-full rounded-2xl border border-[var(--card-border)] bg-[var(--surface)] pl-11 pr-4 text-sm text-[var(--text-primary)] outline-none transition focus:border-cyan-400/45 focus:ring-4 focus:ring-cyan-400/10"
+              className="min-h-[52px] w-full rounded-2xl border border-[var(--card-border)] bg-[var(--surface)] pl-11 pr-4 text-sm text-[var(--text-primary)] outline-none transition focus:border-cyan-400/45 focus:ring-4 focus:ring-cyan-400/10"
             />
           </label>
           <div className="no-scrollbar flex gap-2 overflow-x-auto">
@@ -570,7 +570,7 @@ function ItemsTab() {
     <Card className="p-5">
       <SectionHeader title="Cadastro de itens" description="Estrutura pronta para editar, duplicar, filtrar e manter itens recorrentes ativos." icon={ICONS.finance.category} />
       <div className="mb-4 flex flex-col gap-3 md:flex-row">
-        <input className="h-11 flex-1 rounded-2xl border border-[var(--card-border)] bg-[var(--surface)] px-4 text-sm text-[var(--text-primary)] outline-none focus:border-cyan-400/40" placeholder="Buscar item, marca ou categoria" />
+        <input className="min-h-[52px] flex-1 rounded-2xl border border-[var(--card-border)] bg-[var(--surface)] px-4 text-sm text-[var(--text-primary)] outline-none focus:border-cyan-400/40" placeholder="Buscar item, marca ou categoria" />
         <button className="h-11 rounded-2xl bg-cyan-500 px-5 text-sm font-bold text-white">Novo item</button>
       </div>
       <div className="grid gap-3 md:grid-cols-2">

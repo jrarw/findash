@@ -57,7 +57,8 @@ export default function LoginPage() {
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="seu@email.com"
-              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/25 focus:outline-none focus:border-[#00E5FF]/40 transition-all"
+              inputMode="email"
+              className="min-h-[52px] w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/25 focus:outline-none focus:border-[#00E5FF]/40 transition-all"
               style={{ fontSize: '16px' }}
               onKeyDown={e => e.key === 'Enter' && handleLogin()}
             />
@@ -70,7 +71,7 @@ export default function LoginPage() {
               value={senha}
               onChange={e => setSenha(e.target.value)}
               placeholder="••••••••"
-              className="w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/25 focus:outline-none focus:border-[#00E5FF]/40 transition-all"
+              className="min-h-[52px] w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/25 focus:outline-none focus:border-[#00E5FF]/40 transition-all"
               style={{ fontSize: '16px' }}
               onKeyDown={e => e.key === 'Enter' && handleLogin()}
             />

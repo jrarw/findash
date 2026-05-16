@@ -55,7 +55,7 @@ export function FinSmartInput() {
           onChange={e => setQuery(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && handleSubmit(query)}
           placeholder="Pergunte sobre suas finanças..."
-          className="w-full bg-white/[0.04] border border-white/[0.08] rounded-2xl px-4 py-3.5 pr-12 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#00E5FF]/40 focus:bg-white/[0.06] transition-all"
+          className="min-h-[52px] w-full bg-white/[0.04] border border-white/[0.08] rounded-2xl px-4 py-3.5 pr-12 text-sm text-white placeholder-white/25 focus:outline-none focus:border-[#00E5FF]/40 focus:bg-white/[0.06] transition-all"
           style={{ fontSize: '16px' }}
         />
         <button

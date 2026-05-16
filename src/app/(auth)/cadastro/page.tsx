@@ -59,7 +59,7 @@ export default function CadastroPage() {
     setLoading(false)
   }
 
-  const inputClass = "w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/25 focus:outline-none focus:border-[#00E5FF]/40 transition-all"
+  const inputClass = "min-h-[52px] w-full bg-white/[0.04] border border-white/[0.08] rounded-xl px-4 py-3 text-white placeholder-white/25 focus:outline-none focus:border-[#00E5FF]/40 transition-all"
 
   return (
     <div className="min-h-dvh flex items-center justify-center px-4">
@@ -93,6 +93,7 @@ export default function CadastroPage() {
             <label className="text-xs text-white/40 mb-2 block">Email</label>
             <input
               type="email"
+              inputMode="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="seu@email.com"
