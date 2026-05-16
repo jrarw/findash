@@ -1,7 +1,9 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { usePathname } from 'next/navigation'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Icon } from '@/components/ui/icon'
 import { NotificationPanel } from '@/components/notifications/NotificationCenter'
 import { useFinNotifications } from '@/hooks/useFinNotifications'
@@ -15,6 +17,8 @@ interface NotificationBellProps {
 
 export function NotificationBell({ className, panelAlign = 'right' }: NotificationBellProps) {
   const [open, setOpen] = useState(false)
+  const [panelPosition, setPanelPosition] = useState({ top: 72, left: 16 })
+  const pathname = usePathname()
   const ref = useRef<HTMLDivElement | null>(null)
   const panelRef = useRef<HTMLDivElement | null>(null)
   const {
@@ -27,7 +31,33 @@ export function NotificationBell({ className, panelAlign = 'right' }: Notificati
     clearAll,
   } = useFinNotifications()
 
+  useLayoutEffect(() => {
+    function updatePosition() {
+      if (!ref.current || typeof window === 'undefined') return
+      const rect = ref.current.getBoundingClientRect()
+      const width = 360
+      const margin = 12
+      const preferredLeft = panelAlign === 'left' ? rect.left : rect.right - width
+      const left = Math.min(Math.max(margin, preferredLeft), window.innerWidth - width - margin)
+      setPanelPosition({ top: rect.bottom + 10, left })
+    }
+
+    if (open) updatePosition()
+    window.addEventListener('resize', updatePosition)
+    window.addEventListener('scroll', updatePosition, true)
+    return () => {
+      window.removeEventListener('resize', updatePosition)
+      window.removeEventListener('scroll', updatePosition, true)
+    }
+  }, [open, panelAlign])
+
   useEffect(() => {
+    setOpen(false)
+  }, [pathname])
+
+  useEffect(() => {
+    if (!open) return
+
     function handlePointerDown(event: PointerEvent) {
       const target = event.target as Node
       if (!ref.current?.contains(target) && !panelRef.current?.contains(target)) setOpen(false)
@@ -35,33 +65,74 @@ export function NotificationBell({ className, panelAlign = 'right' }: Notificati
 
     document.addEventListener('pointerdown', handlePointerDown)
     return () => document.removeEventListener('pointerdown', handlePointerDown)
-  }, [])
+  }, [open])
 
-  const panel = open ? (
-    <>
-      <div
-        onClick={() => setOpen(false)}
-        className="fixed inset-0 z-[9998] bg-[var(--bg-overlay)] backdrop-blur-sm sm:hidden"
-      />
-      <div
-        ref={panelRef}
-        className={cn(
-          'fixed inset-x-0 bottom-0 top-16 z-[9999] px-3 pb-[calc(12px+env(safe-area-inset-bottom))] pt-3 sm:bottom-auto sm:left-auto sm:right-4 sm:top-16 sm:w-[min(92vw,420px)] sm:p-0 xl:right-auto xl:top-16',
-          panelAlign === 'left' ? 'xl:left-4' : 'xl:right-4',
-        )}
-      >
-        <NotificationPanel
-          notifications={notifications}
-          unreadCount={unreadCount}
-          criticalCount={criticalCount}
-          onRead={markAsRead}
-          onDismiss={dismiss}
-          onMarkAll={markAllAsRead}
-          onClearAll={clearAll}
-        />
-      </div>
-    </>
-  ) : null
+  const panel = (
+    <AnimatePresence>
+      {open && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.4 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={() => setOpen(false)}
+            className="fixed inset-0 z-50 bg-black sm:hidden"
+          />
+
+          <motion.div
+            ref={panelRef}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            onPointerDown={event => event.stopPropagation()}
+            className="fixed z-[60] hidden w-[360px] sm:block"
+            style={{ top: panelPosition.top, left: panelPosition.left }}
+          >
+            <NotificationPanel
+              notifications={notifications}
+              unreadCount={unreadCount}
+              criticalCount={criticalCount}
+              onRead={markAsRead}
+              onDismiss={dismiss}
+              onMarkAll={markAllAsRead}
+              onClearAll={clearAll}
+              onClose={() => setOpen(false)}
+            />
+          </motion.div>
+
+          <motion.div
+            ref={panelRef}
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ duration: 0.3, ease: 'easeOut' }}
+            drag="y"
+            dragConstraints={{ top: 0, bottom: 0 }}
+            dragElastic={{ top: 0, bottom: 0.22 }}
+            onDragEnd={(_, info) => {
+              if (info.offset.y > 80 || info.velocity.y > 650) setOpen(false)
+            }}
+            onPointerDown={event => event.stopPropagation()}
+            className="fixed inset-x-0 bottom-0 z-[60] block sm:hidden"
+          >
+            <NotificationPanel
+              notifications={notifications}
+              unreadCount={unreadCount}
+              criticalCount={criticalCount}
+              onRead={markAsRead}
+              onDismiss={dismiss}
+              onMarkAll={markAllAsRead}
+              onClearAll={clearAll}
+              onClose={() => setOpen(false)}
+              mobile
+            />
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  )
 
   return (
     <div ref={ref} className={cn('relative', className)}>
@@ -76,7 +147,7 @@ export function NotificationBell({ className, panelAlign = 'right' }: Notificati
       >
         <Icon name={ICONS.status.notification} className="text-xl" />
         {unreadCount > 0 && (
-          <span className="arw-on-accent absolute -right-1 -top-1 flex min-h-5 min-w-5 items-center justify-center rounded-full bg-[var(--cyan)] px-1 text-[10px] font-bold text-white shadow-[0_8px_18px_rgba(6,182,212,0.25)]">
+          <span className="arw-on-accent absolute -right-1 -top-1 flex h-[18px] min-w-[18px] items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-bold leading-none text-white shadow-[0_8px_18px_rgba(239,68,68,0.28)]">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
