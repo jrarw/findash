@@ -262,12 +262,15 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
             paddingRight: 'max(16px, var(--sar))',
           }}
         >
-          <button
-            onClick={() => setSidebarOpen(true)}
-            className="flex h-11 w-11 items-center justify-center rounded-2xl text-[var(--text-muted)] transition-all active:scale-95 active:bg-[var(--surface-hover)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)]"
-          >
-            <Icon name={ICONS.action.menu} className="text-xl" />
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="flex h-11 w-11 items-center justify-center rounded-2xl text-[var(--text-muted)] transition-all active:scale-95 active:bg-[var(--surface-hover)] hover:bg-[var(--surface-hover)] hover:text-[var(--text-primary)]"
+            >
+              <Icon name={ICONS.action.menu} className="text-xl" />
+            </button>
+            <ThemeToggle className="h-11 w-11 border-0 bg-transparent shadow-none active:scale-95 active:bg-[var(--surface-hover)] hover:translate-y-0 hover:bg-[var(--surface-hover)] hover:shadow-none" />
+          </div>
 
           <div className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2">
             <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-500 flex items-center justify-center">
@@ -277,7 +280,6 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
           </div>
 
           <div className="flex items-center gap-2">
-            <ThemeToggle />
             <NotificationBell />
             <Link href="/dashboard/perfil" className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-purple-500 to-cyan-400 text-sm font-bold text-white shadow-[0_10px_24px_rgba(6,182,212,0.16)]">
               {usuario?.nome?.[0]?.toUpperCase() ?? 'U'}

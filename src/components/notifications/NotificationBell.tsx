@@ -17,6 +17,7 @@ interface NotificationBellProps {
 
 export function NotificationBell({ className, panelAlign = 'right' }: NotificationBellProps) {
   const [open, setOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const [panelPosition, setPanelPosition] = useState({ top: 72, left: 16 })
   const pathname = usePathname()
   const ref = useRef<HTMLDivElement | null>(null)
@@ -31,6 +32,16 @@ export function NotificationBell({ className, panelAlign = 'right' }: Notificati
     clearAll,
   } = useFinNotifications()
 
+  useEffect(() => {
+    function updateViewport() {
+      setIsMobile(window.innerWidth < 640)
+    }
+
+    updateViewport()
+    window.addEventListener('resize', updateViewport)
+    return () => window.removeEventListener('resize', updateViewport)
+  }, [])
+
   useLayoutEffect(() => {
     function updatePosition() {
       if (!ref.current || typeof window === 'undefined') return
@@ -42,14 +53,14 @@ export function NotificationBell({ className, panelAlign = 'right' }: Notificati
       setPanelPosition({ top: rect.bottom + 10, left })
     }
 
-    if (open) updatePosition()
+    if (open && !isMobile) updatePosition()
     window.addEventListener('resize', updatePosition)
     window.addEventListener('scroll', updatePosition, true)
     return () => {
       window.removeEventListener('resize', updatePosition)
       window.removeEventListener('scroll', updatePosition, true)
     }
-  }, [open, panelAlign])
+  }, [open, panelAlign, isMobile])
 
   useEffect(() => {
     setOpen(false)
@@ -71,64 +82,68 @@ export function NotificationBell({ className, panelAlign = 'right' }: Notificati
     <AnimatePresence>
       {open && (
         <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.4 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            onClick={() => setOpen(false)}
-            className="fixed inset-0 z-50 bg-black sm:hidden"
-          />
-
-          <motion.div
-            ref={panelRef}
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
-            onPointerDown={event => event.stopPropagation()}
-            className="fixed z-[60] hidden w-[360px] sm:block"
-            style={{ top: panelPosition.top, left: panelPosition.left }}
-          >
-            <NotificationPanel
-              notifications={notifications}
-              unreadCount={unreadCount}
-              criticalCount={criticalCount}
-              onRead={markAsRead}
-              onDismiss={dismiss}
-              onMarkAll={markAllAsRead}
-              onClearAll={clearAll}
-              onClose={() => setOpen(false)}
+          {isMobile && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.4 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              onClick={() => setOpen(false)}
+              className="fixed inset-0 z-50 bg-black"
             />
-          </motion.div>
+          )}
 
-          <motion.div
-            ref={panelRef}
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '100%' }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
-            drag="y"
-            dragConstraints={{ top: 0, bottom: 0 }}
-            dragElastic={{ top: 0, bottom: 0.22 }}
-            onDragEnd={(_, info) => {
-              if (info.offset.y > 80 || info.velocity.y > 650) setOpen(false)
-            }}
-            onPointerDown={event => event.stopPropagation()}
-            className="fixed inset-x-0 bottom-0 z-[60] block sm:hidden"
-          >
-            <NotificationPanel
-              notifications={notifications}
-              unreadCount={unreadCount}
-              criticalCount={criticalCount}
-              onRead={markAsRead}
-              onDismiss={dismiss}
-              onMarkAll={markAllAsRead}
-              onClearAll={clearAll}
-              onClose={() => setOpen(false)}
-              mobile
-            />
-          </motion.div>
+          {isMobile ? (
+            <motion.div
+              ref={panelRef}
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ duration: 0.3, ease: 'easeOut' }}
+              drag="y"
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={{ top: 0, bottom: 0.22 }}
+              onDragEnd={(_, info) => {
+                if (info.offset.y > 80 || info.velocity.y > 650) setOpen(false)
+              }}
+              onPointerDown={event => event.stopPropagation()}
+              className="fixed inset-x-0 bottom-0 z-[60]"
+            >
+              <NotificationPanel
+                notifications={notifications}
+                unreadCount={unreadCount}
+                criticalCount={criticalCount}
+                onRead={markAsRead}
+                onDismiss={dismiss}
+                onMarkAll={markAllAsRead}
+                onClearAll={clearAll}
+                onClose={() => setOpen(false)}
+                mobile
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              ref={panelRef}
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: 'easeOut' }}
+              onPointerDown={event => event.stopPropagation()}
+              className="fixed z-[60] w-[360px]"
+              style={{ top: panelPosition.top, left: panelPosition.left }}
+            >
+              <NotificationPanel
+                notifications={notifications}
+                unreadCount={unreadCount}
+                criticalCount={criticalCount}
+                onRead={markAsRead}
+                onDismiss={dismiss}
+                onMarkAll={markAllAsRead}
+                onClearAll={clearAll}
+                onClose={() => setOpen(false)}
+              />
+            </motion.div>
+          )}
         </>
       )}
     </AnimatePresence>

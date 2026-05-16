@@ -1,8 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  experimental: {
-    typedRoutes: false,
+  typedRoutes: false,
+  turbopack: {
+    root: process.cwd(),
   },
   async redirects() {
     return [
