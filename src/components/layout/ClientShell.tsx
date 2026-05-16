@@ -314,7 +314,7 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
           paddingRight: 'max(8px, var(--sar))',
         }}
       >
-        <div className="mx-auto flex h-16 max-w-md items-center justify-around rounded-t-[18px] border border-[rgba(0,0,0,0.06)] bg-white/85 px-2 shadow-[0_14px_35px_rgba(15,23,42,0.14)] backdrop-blur-xl">
+        <div className="mx-auto flex h-16 max-w-md items-center justify-around rounded-t-[18px] border border-[var(--card-border)] bg-[var(--surface-glass)] px-2 shadow-[var(--card-shadow)] backdrop-blur-xl">
           {NAV_ITEMS.map(item => {
             const active = isActive(pathname, item.href, item.exact)
             const isCenter = item.href === '/dashboard/lancar'
@@ -339,7 +339,7 @@ export function ClientShell({ children }: { children: React.ReactNode }) {
                 aria-label={item.label}
                 className={cn(
                   'flex min-h-[48px] min-w-[54px] flex-col items-center justify-center gap-0.5 rounded-2xl px-2 py-1.5 transition-all active:scale-95',
-                  active ? 'bg-cyan-500/10 text-[var(--cyan)]' : 'text-[rgba(0,0,0,0.35)]'
+                  active ? 'bg-[var(--cyan-muted)] text-[var(--cyan)]' : 'text-[var(--text-muted)]'
                 )}
               >
                 <Icon name={item.icon} className={cn('text-[22px]', !active && 'opacity-35')} />

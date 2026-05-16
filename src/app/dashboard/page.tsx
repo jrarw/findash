@@ -217,26 +217,6 @@ export default function DashboardPage() {
           </AnalysisInsightCard>
         </motion.section>
 
-        <motion.section variants={stagger.item} className="grid gap-5 lg:grid-cols-[0.8fr_1.2fr]">
-          <Card className="p-5 md:p-6">
-            <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-400/10 text-cyan-500">
-              <Icon name={ICONS.brand.ai} className="text-2xl" />
-            </div>
-            <p className="mt-5 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--text-subtle)]">Leitura do sistema</p>
-            <h2 className="mt-2 text-2xl font-black tracking-tight text-[var(--text-primary)]">
-              {financialOS.insights[0]?.title ?? 'Seu Financial OS está observando o mês.'}
-            </h2>
-            <p className="mt-3 text-sm leading-6 text-[var(--text-muted)]">
-              {financialOS.insights[0]?.description ?? 'Conforme seus dados entram, o app cria diagnóstico, previsões e recomendações mais precisas.'}
-            </p>
-            <Link href="/dashboard/insights" className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-cyan-500 px-4 py-2 text-sm font-bold text-white transition hover:bg-cyan-400">
-              Abrir Central Cognitiva
-              <Icon name={ICONS.action.arrowRight} />
-            </Link>
-          </Card>
-          <FinancialOSModuleGrid />
-        </motion.section>
-
         <motion.section variants={stagger.item} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <MetricCard
             label="Saldo do mês"
@@ -344,6 +324,26 @@ export default function DashboardPage() {
               ],
             }}
           />
+        </motion.section>
+
+        <motion.section variants={stagger.item} className="grid gap-3 lg:grid-cols-[0.8fr_1.2fr] lg:gap-5">
+          <Card className="hidden p-5 md:p-6 lg:block">
+            <div className="inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-400/10 text-cyan-500">
+              <Icon name={ICONS.brand.ai} className="text-2xl" />
+            </div>
+            <p className="mt-5 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--text-subtle)]">Leitura do sistema</p>
+            <h2 className="mt-2 text-2xl font-black tracking-tight text-[var(--text-primary)]">
+              {financialOS.insights[0]?.title ?? 'Seu Financial OS está observando o mês.'}
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-[var(--text-muted)]">
+              {financialOS.insights[0]?.description ?? 'Conforme seus dados entram, o app cria diagnóstico, previsões e recomendações mais precisas.'}
+            </p>
+            <Link href="/dashboard/insights" className="mt-5 inline-flex items-center gap-2 rounded-2xl bg-cyan-500 px-4 py-2 text-sm font-bold text-white transition hover:bg-cyan-400">
+              Abrir Central Cognitiva
+              <Icon name={ICONS.action.arrowRight} />
+            </Link>
+          </Card>
+          <FinancialOSModuleGrid />
         </motion.section>
 
         <div className="grid gap-5 lg:grid-cols-[1.45fr_0.9fr]">

@@ -99,6 +99,9 @@ function MetricTile({ label, value, icon }: { label: string; value: string; icon
 
 export function FinancialOSModuleGrid() {
   const modules = [
+    { href: '/dashboard/lancar', label: 'Lançar', desc: 'Registre entradas e saídas rapidamente.', icon: ICONS.action.add },
+    { href: '/dashboard/extrato', label: 'Extrato', desc: 'Movimentações e histórico financeiro.', icon: ICONS.nav.statement },
+    { href: '/dashboard/contas', label: 'Contas', desc: 'Vencimentos e contas a pagar.', icon: ICONS.nav.bills },
     { href: '/dashboard/health', label: 'Fin Health', desc: 'Score vivo, pilares, pressão e conquistas.', icon: ICONS.health.score },
     { href: '/dashboard/insights', label: 'Central Cognitiva', desc: 'Padrões detectados e ações recomendadas.', icon: ICONS.brand.ai },
     { href: '/dashboard/previsao', label: 'Previsão de Futuro', desc: 'Cenários, risco e fechamento provável.', icon: ICONS.health.forecast },
@@ -108,21 +111,21 @@ export function FinancialOSModuleGrid() {
   ]
 
   return (
-    <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+    <div className="grid grid-cols-3 gap-2 md:gap-3 lg:grid-cols-2 xl:grid-cols-3">
       {modules.map(module => (
         <Link
           key={module.href}
           href={module.href}
-          className="group rounded-[1.5rem] border border-[var(--card-border)] bg-[var(--surface)] p-5 shadow-[var(--card-shadow)] transition hover:-translate-y-0.5 hover:border-cyan-400/30"
+          className="group flex min-h-[86px] flex-col items-center justify-center rounded-2xl border border-[var(--card-border)] bg-[var(--surface)] p-2 text-center shadow-[var(--card-shadow)] transition hover:-translate-y-0.5 hover:border-cyan-400/30 md:min-h-[unset] md:items-stretch md:justify-start md:rounded-[1.5rem] md:p-5 md:text-left"
         >
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-400/10 text-cyan-500">
-              <Icon name={module.icon} className="text-xl" />
+          <div className="flex items-center justify-center md:items-start md:justify-between md:gap-4">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-500 md:h-11 md:w-11 md:rounded-2xl">
+              <Icon name={module.icon} className="text-lg md:text-xl" />
             </div>
-            <Icon name={ICONS.action.arrowRight} className="text-lg text-[var(--text-subtle)] transition group-hover:translate-x-1 group-hover:text-cyan-500" />
+            <Icon name={ICONS.action.arrowRight} className="hidden text-lg text-[var(--text-subtle)] transition group-hover:translate-x-1 group-hover:text-cyan-500 md:block" />
           </div>
-          <h3 className="mt-5 text-lg font-black text-[var(--text-primary)]">{module.label}</h3>
-          <p className="mt-2 text-sm leading-6 text-[var(--text-muted)]">{module.desc}</p>
+          <h3 className="mt-2 text-[11px] font-black leading-tight text-[var(--text-primary)] md:mt-5 md:text-lg">{module.label}</h3>
+          <p className="mt-2 hidden text-sm leading-6 text-[var(--text-muted)] md:block">{module.desc}</p>
         </Link>
       ))}
     </div>

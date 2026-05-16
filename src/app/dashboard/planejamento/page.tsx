@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { Suspense, useMemo } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Card } from '@/components/ui/card'
@@ -24,7 +24,7 @@ function resolveTab(value: string | null): PlanningTab {
   return 'metas'
 }
 
-export default function PlanejamentoPage() {
+function PlanejamentoContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const activeTab = resolveTab(searchParams.get('tab'))
@@ -93,5 +93,13 @@ export default function PlanejamentoPage() {
         </motion.div>
       </motion.div>
     </div>
+  )
+}
+
+export default function PlanejamentoPage() {
+  return (
+    <Suspense fallback={null}>
+      <PlanejamentoContent />
+    </Suspense>
   )
 }
